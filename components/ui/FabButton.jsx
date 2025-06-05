@@ -32,7 +32,7 @@ const FabButton = () => {
       {/* <div className="gap-3"> */}
         {openSubMenu && (
           <ul>
-           <a href="tel:01074964899">
+           <a href="tel:01052558944">
            <button className="bg-[#001391] flex items-center justify-center w-13 h-13 xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110">
             <CiPhone className="w-7 h-7" />
            </button>

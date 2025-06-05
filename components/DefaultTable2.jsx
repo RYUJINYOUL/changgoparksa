@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
 import { getFirestore, collection, where, setDoc, onSnapshot, query} from "firebase/firestore";
 import app from '../firebase.js';
+import Image from "next/image";
 
 
 
@@ -29,18 +30,18 @@ export default function DefaultTable({props}) {
 
   const addMessagesListener = async () => {
 
-    const tweetsQuery = query(collection(db2, "reviews"))
+    const tweetsQuery = query(collection(db2, "recommend"))
 
       await onSnapshot(tweetsQuery, (snapshot) => { // <---- 
         const tweetList = snapshot.docs.map((doc) => {
           const { name, description, url, 
-            title, phoneNumber, createdDate, NumOfLikes, userKey, password
+            title, phoneNumber, createdDate, NumOfLikes, userKey
           } = doc.data();
           const id = doc.id
           const date = doc.data().createdDate.toDate();
           return {
             name, description, url, id,
-            title, phoneNumber, date, NumOfLikes, userKey, password
+            title, date, NumOfLikes, userKey, url
           };
         });
           setMessages(tweetList);
@@ -52,22 +53,8 @@ export default function DefaultTable({props}) {
 
 
 
-  const onClickCard = ({ title, name, description, date, id, password }) => {
-      var enteredName=""
-      if (currentUser.uid === "aRWcjBBQoHXE4qtZDJWzZ5P8hBE2" || password === "") {
-        push(`/ta/playlist?id=${id}&title=${title}&name=${name}&des=${description}&date=${date}`)
-      } else if (enteredName = prompt('비밀번호를 입력해주세요')) {
-           if(enteredName === "12"){
-               alert("방문해주셔서 감사합니다.")
-              push(`/ta/playlist?id=${id}&title=${title}&name=${name}&des=${description}&date=${date}`)
-           } else {
-          alert("비밀번호가    fdfs틀립니다.")
-          push("/ta");
-           }      
-      } else {
-          alert("비밀번호가 틀립니다.")
-          push("/ta");
-      }
+  const onClickCard = ({ id }) => {     //url은 []
+    push(`/qu/playlist?id=${id}`)
     // push(`/test/?name=${id}collection=${collection}`);
   };
 
@@ -96,26 +83,31 @@ export default function DefaultTable({props}) {
           </tr>
         </thead>
         <tbody>
-          {message.map(({ title, name, description, date, id, password }, index) => {
-            
+          {message.map(({ title, name, description, date, id, url }, index) => {
             const classes = "p-4";
  
             return (
-              <tr key={index} onClick={()=>onClickCard({ title, name, description, date, id, password })}>
+              <tr key={index} onClick={()=>onClickCard({ id })}>
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal truncate w-[20px]"
+                    className="font-normal truncate w-[40px]"
                   >
-                    {index + 1}
+                     <Image
+                        alt="mediaItem"
+                        className="object-contain"
+                        width={50}
+                        height={50}
+                        src={url[0]}
+                      />  
                   </Typography>
                 </td>
                 <td className={classes}>
                   <Typography
                     variant="small"
                     color="blue-gray"
-                    className="font-normal truncate md:w-[500px] w-[80px] line-clamp-1"
+                    className="font-normal truncate md:w-[500px] w-[60px] line-clamp-1"
                     // onClick={()=>onClickCard({ title, name, description, date, id, password })}
                   >
                     {title}

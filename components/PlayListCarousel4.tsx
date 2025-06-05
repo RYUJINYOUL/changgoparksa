@@ -25,7 +25,7 @@ const PlayListCarousel4: React.FC<PlayListCarouselProps> = ({
               <CarouselItem
                 key={index}
                 // className="min-[400px]:basis-3/4 md:basis-1/3 lg:basis-1/4 xl:basis-1/4"
-                className="basis-3/5"
+                className="md:basis-3/5 basis-5/6"
               >
                 <PlayListCard4 playlist={playlist} />
               </CarouselItem>

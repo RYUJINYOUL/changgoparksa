@@ -19,8 +19,8 @@ const page = () => {
         <div className="md:w-[1100px] w-full lg:mt-10 pt-3.5">
         <Tabs defaultValue="account" className="w-full">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">나의 문의/신청 내역</TabsTrigger>
-          <TabsTrigger value="password">문의/신청</TabsTrigger>
+          <TabsTrigger value="account">추천매물</TabsTrigger>
+          <TabsTrigger value="password">업로드</TabsTrigger>
         </TabsList>
 
 

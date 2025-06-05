@@ -47,7 +47,7 @@ const page = async (props) => {
 
       <div className='bg-[#fafafa]' />
 
-      <Comment props={id}/>
+       <Comment id={id} col="review" path="/ta" />
       
       
        <section className='flex justify-center items-center'>
@@ -60,7 +60,7 @@ const page = async (props) => {
           height={130}
           src={"/Image/mainmiddle.jpeg"}
         />  
-        <div className='text-[18px]'>루틴그라운드 개포</div>
+        <div className='text-[18px]'>바른부동산중개사무소</div>
         </div>
        </section>
        <div className='h-[150px]'/>

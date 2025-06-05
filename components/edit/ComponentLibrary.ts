@@ -9,7 +9,6 @@ import CalendarComponent from '../template/Calendar';
 
 export const ComponentLibrary: Record<string, React.FC<any>> = {
   이미지: GalleryComponent,
-  이미지2: GalleryComponent1,
   리뷰쓰기: ReviewComponent,
   달력: CalendarComponent
 };

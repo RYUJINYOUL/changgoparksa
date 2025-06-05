@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
 
 
-const Comment = ({props}) => {
+const Comment = ({ id, col, path }) => {
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
   const timeFromNow = timestamp => moment(timestamp).format('YYYY.MM.DD');
   const [message, setMessages] = useState([]);
@@ -28,7 +28,7 @@ const Comment = ({props}) => {
   
     const addMessagesListener = async () => {
     
-      const tweetsQuery = query(collection(db2, "reviews", props, "comments"), orderBy("createdDate", "desc"))
+      const tweetsQuery = query(collection(db2, col, id, "comments"), orderBy("createdDate", "desc"))
   
         await onSnapshot(tweetsQuery, (snapshot) => { // <---- 
           const tweetList = snapshot.docs.map((doc) => {
@@ -43,9 +43,9 @@ const Comment = ({props}) => {
 
 
 
-  const deleteDocs = async (id) => {
+  const deleteDocs = async (ids) => {
     if (window.confirm("삭제 하시겠습니까??")) {
-         await deleteDoc(doc(db2, "reviews", props, "comments", id))
+         await deleteDoc(doc(db2, col, id, "comments", ids))
          alert("삭제되었습니다.");
         } else {
          alert("취소합니다.");
@@ -56,7 +56,7 @@ const Comment = ({props}) => {
 
 
   const onClickUpLoadButton = async (data) => {  
-     await addDoc(collection(db2, "reviews", props, "comments"),
+     await addDoc(collection(db2, col, id, "comments"),
          {
            "name": currentUser.name ?? "익명",
            "description": data.description,
@@ -70,10 +70,10 @@ const Comment = ({props}) => {
 
     
     
-  const deleteCol = async (id) => {
+  const deleteCol = async (ids) => {
       if (window.confirm("삭제 하시겠습니까??")) {
           const items = []
-          const subcols = query(collection(db2, "reviews", props, "comments"))
+          const subcols = query(collection(db2, col, id, "comments"))
           const querySnapshot = await getDocs(subcols)
           querySnapshot.forEach((doc) => {
                 items.push(doc)
@@ -82,7 +82,7 @@ const Comment = ({props}) => {
         await deleteDoc(doc(db2, "reviews", props, "comments", items[i].id))
           }
           
-          await deleteDoc(doc(db2, "reviews", id))
+          await deleteDoc(doc(db2, "reviews", ids))
             alert("삭제되었습니다.");
             push("/ta")
       } else {
@@ -101,7 +101,7 @@ const Comment = ({props}) => {
             <div className='flex flex-row items-center justify-between lg:w-[1100px] w-full'>
                <div className='font-semibold text-[20px]'>답변</div>
                <div className='flex flex-row items-center gap-3'>
-                <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {push("/ta")}}>목록</button>
+                <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {push(path)}}>목록</button>
                 <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {deleteCol(props)}}>삭제</button>
                </div>
             </div>   

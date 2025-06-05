@@ -26,19 +26,18 @@ const PlayListCard4 = ({ playlist = [], collection = "" } = {}) => {
   
 
   return (
-    <article className="h-[350px] cursor-pointer group">
-    <section onClick={onClickCard} className=" relative h-[350px] ">
+    <article className="">
+    <section className="relative h-[350px]">
       <Image
         src={
           playlist ||
-          "https://www.redwoodhikes.com/JedSmith/JedSmith1.jpeg"
+          ""
         }
         fill={true}
         alt="thumbnail"
-        className="object-contain rounded-md border-2 border-black-200 border-opacity-25"
+        className="object-cover rounded-md"
       />
-      <div className="hidden relative group-hover:block bg-black bg-opacity-20 rounded-md from-[rgba(0,0,0,0.7)] top-0 w-full h-[350px] ">
-      </div>
+  
     </section>
 
   </article>
