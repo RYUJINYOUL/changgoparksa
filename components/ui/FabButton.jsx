@@ -5,7 +5,7 @@ import { FaRegEnvelope } from "react-icons/fa";
 import { LuMapPin } from "react-icons/lu";
 import { useRouter } from 'next/navigation'
 import useUIState from "@/hooks/useUIState";
-import { IoPersonOutline } from "react-icons/io5";
+import { CgNotes } from "react-icons/cg";
 
 const FabButton = () => {
   const [openSubMenu, setOpenSubMenu] = useState(false);
@@ -52,8 +52,8 @@ const FabButton = () => {
   
 
           <button className="bg-[#001391] mt-3 flex items-center justify-center w-13 h-13 xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110" 
-          onClick={() => {onClickCategory("오시는 길" ,"/map")}}>
-            <LuMapPin className="w-6 h-6" />
+          onClick={() => {window.open('https://b3044.kmswb.kr/')}}>
+            <CgNotes className="w-6 h-6" />
            </button>
              {/* <a href="mailto:contat@exaple.com"
             className="my-3 flex items-center justify-center w-12 h-12 xs:w-10 xs:h-10 bg-blue-600 text-white rounded-full shadow-lg transition-transform hover:scale-110">

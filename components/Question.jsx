@@ -20,10 +20,11 @@ const question = () => {
   const { currentUser } = useSelector(state => state.user)
 
 
+
    const onClickUpLoadButton = async (data) => {  
      await addDoc(collection(db2, "recommend"),
         {
-          "name": currentUser.name ?? "익명",
+          "name": currentUser.name ?? "null",
           "description": data.description,
           "url": image,
           "title": data.title?? "",
@@ -83,6 +84,47 @@ const question = () => {
     })
     return image
   }
+
+
+//   async function uploadUrl() {
+//   for (const file of uploadFile) {
+//     const timestamp = Date.now();
+//     const metadata = { contentType: file.type };
+//     const storagePath = `uploads/${userId}/${timestamp}-${file.name}`;
+//     const storageRef = strRef(storage, storagePath);
+
+//     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+
+//     await new Promise((resolve, reject) => {
+//       uploadTask.on(
+//         "state_changed",
+//         (snapshot) => {
+//           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+//           setPercentage(Math.round(progress));
+//         },
+//         (error) => {
+//           console.error("Upload error:", error);
+//           reject(error);
+//         },
+//         async () => {
+//           try {
+//             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+//             image.push({ url: downloadURL, path: storagePath });
+//             setImage(prev => [...prev, downloadURL]);
+//             resolve(); // continue loop
+//           } catch (e) {
+//             reject(e);
+//           }
+//         }
+//       );
+//     });
+//   }
+
+//   return image; // each item: { url, path }
+// }
+  
+
+
   
     function selectFiles(){
       fileInputRef.current.click()

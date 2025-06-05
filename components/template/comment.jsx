@@ -68,6 +68,16 @@ const Comment = ({ id, col, path }) => {
     
       }
 
+
+  async function deleteFile() {
+    const fileRef = strRef(storage, test);
+    try {
+      await deleteObject(fileRef);
+      console.log(`Deleted: ${path}`);
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
+}    
     
     
   const deleteCol = async (ids) => {
@@ -85,6 +95,9 @@ const Comment = ({ id, col, path }) => {
           await deleteDoc(doc(db2, "reviews", ids))
             alert("삭제되었습니다.");
             push("/ta")
+
+          await deleteFile()
+            
       } else {
             alert("취소합니다.");
             }
