@@ -46,12 +46,14 @@ const Page = (props) => {
                 playlistArray={message.url}
               />
             <div className='mt-10' />
-            <div className='text-[15px] h-[150px] text-start leading-7'>{message.description}</div>
+            <div className='text-[15px] h-full text-start leading-7'>
+              <p style={{ whiteSpace: "pre-wrap" }}>{message.description}</p>
+              </div>
             <div className='mt-10' />
           </div>
         </section>
         <div className='bg-[#fafafa]' />
-        <Comment id={id} col="recommend" path="/qu" />
+        <Comment id={id} col="recommend" path="/qu" urls={message.url} />
         <section className='flex justify-center items-center'>
           <div className='w-[1100px] mt-8 flex flex-row items-center gap-8'>
             <Image alt="mediaItem" className="object-contain" width={130} height={130} src={"/Image/mainmiddle.jpeg"} />

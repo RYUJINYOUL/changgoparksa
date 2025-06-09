@@ -86,12 +86,12 @@ const Gallery3 = () => {
               </p>
               <div className="mt-2"></div>
 
-               <div className="md:hidden block grid place-items-center grid-cols-4 p-4 text-center">
+               <div className="grid place-items-center grid-cols-4 p-4 text-center">
                   <a href="" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center hover:text-blue-400">
-                    <button className="mb-1 flex items-center justify-center w-[44px] h-[44px] xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110" 
-                    >
+                    {/* <button className="mb-1 flex items-center justify-center w-[44px] h-[44px] xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110" 
+                    > */}
                     {/* <Share2 className="w-4 h-4 text-white" /> */}
-                    </button>
+                    {/* </button> */}
                     <span className="text-[13px] text-[rgba(255,255,255,.7)]"></span>
                   </a>
                   <a href="tel:01052558944" className="flex flex-col items-center hover:text-blue-400">
@@ -109,10 +109,10 @@ const Gallery3 = () => {
                     <span className="text-[13px] text-[rgba(255,255,255,.7)]">매물보기</span>
                   </a>
                    <a href="" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center hover:text-blue-400">
-                    <button className="mb-1 flex items-center justify-center w-[44px] h-[44px] xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110" 
-                    >
+                    {/* <button className="mb-1 flex items-center justify-center w-[44px] h-[44px] xs:w-11 xs:h-11 text-white rounded-full shadow-lg transition-transform hover:scale-110" 
+                    > */}
                     {/* <Share2 className="w-4 h-4 text-white" /> */}
-                    </button>
+                    {/* </button> */}
                     <span className="text-[13px] text-[rgba(255,255,255,.7)]"></span>
                   </a>
                   {/* <a href="https://example.com/share" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center hover:text-blue-400">

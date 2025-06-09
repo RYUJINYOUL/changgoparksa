@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RiDragDropLine } from "react-icons/ri";
 import { BiSolidPhotoAlbum } from "react-icons/bi";
 
-const review = () => {
+export default function review({ pag, setPag }) {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [image, setImage] = useState([]);
   const { push } = useRouter();
@@ -37,8 +37,7 @@ const review = () => {
         "NumOfLikes": [],
       })
 
-      // push(`/ta?val=account`);
-      location.reload();
+      setPag("account")
   }
 
 
@@ -164,38 +163,7 @@ const review = () => {
        <div className='font-medium text-lg' style={{ textAlign: 'center' }}>
       <h3>글쓰기</h3>
      </div>   
-    {/* <div className='w-full flex justify-center items-center '>
-    <div className={styles.card}>
-      <div className='mt-5' />
-      <div className={styles.dragArea} onClick={selectFiles} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
-        {isDragging ? (
-          <RiDragDropLine size={50} />
-        ) : (
-         <>
-          <RiDragDropLine size={50}/>  {" "} 
-         <span className='select' role='button'>
-         <BiSolidPhotoAlbum size={50} />
-         </span>
-        </>
-        )}
-        <input name='file' type='file' className='file' multiple ref={fileInputRef} onChange={onFileSelect}></input>
-        </div>
-        <div className={styles.container}>
-          {images.map((images, index) => (
-              <div className={styles.image} key={index}>
-              <span className={styles.delete} onClick={() => deleteImage(index)}>&times;</span>
-            <img src={images.url} alt={images.name} />
-          </div>
-          ))}
-         </div>
-        <button className='w-full px-8 py-4 rounded-lg font-medium bg-orange-600 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white'
-         onClick={uploadImage}>
-          이미지업로드
-        </button>
-       
-    </div>
     
-    </div> */}
         <div className='mt-5'/>
         <form className='mx-auto max-w-sm' onSubmit={handleSubmit(onClickUpLoadButton)}>
              <input
@@ -238,4 +206,4 @@ const review = () => {
   )
 }
 
-export default review
+

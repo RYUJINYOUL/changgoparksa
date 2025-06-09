@@ -36,7 +36,9 @@ const page = async (props) => {
        </div>
           <hr className="my-1 h-0.5 border-t-0 bg-neutral-200 opacity-100 dark:opacity-50"/>
           <div className='mt-10' />
-          <div className='text-[15px] h-[150px] text-start leading-7'>{des}</div>
+          <div className='text-[15px] h-[150px] text-start leading-7'>
+            <p style={{ whiteSpace: "pre-wrap" }}>{des}</p>
+            </div>
           <div className='mt-10' />
           {/* <hr className="my-1 h-0.5 border-t-0 bg-neutral-200 opacity-100 dark:opacity-50"/> */}
           <div className='mt-10' />

@@ -8,7 +8,7 @@ import SisulNotice from '@/components/template/SisulNotice'
 import ChangoSogae from '@/components/template/ChangoSogae'
 import Footer from '@/components/template/Footer';
 import Mapping from '@/components/template/Mapping';
-import CalendarWithEvents from '@/components/template/Calendar'
+
 
 const page = () => {
 

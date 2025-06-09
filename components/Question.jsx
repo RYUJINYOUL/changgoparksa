@@ -8,14 +8,19 @@ import { uploadBytesResumable, getDownloadURL, ref as strRef } from 'firebase/st
 import { getFirestore, collection, addDoc} from "firebase/firestore";
 import app, { storage } from '../firebase';
 import { useSelector } from 'react-redux';
+import { useRouter } from "next/navigation";
+import useUIState from "@/hooks/useUIState";
+import imageCompression from 'browser-image-compression';
 
-const question = () => {
+export default function question({ pag, setPag }) {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { homeCategory, setHomeCategory, headerImageSrc, setHeaderImageSrc } = useUIState();
   const [image, setImage] = useState([]);
   const [uploadFile, setUploadFile] = useState([]);
   const [images, setImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+  const { push } = useRouter();
   const db2 = getFirestore(app);
   const { currentUser } = useSelector(state => state.user)
 
@@ -24,17 +29,18 @@ const question = () => {
    const onClickUpLoadButton = async (data) => {  
      await addDoc(collection(db2, "recommend"),
         {
-          "name": currentUser.name ?? "null",
+          "name": currentUser.name ?? "익명",
           "description": data.description,
           "url": image,
           "title": data.title?? "",
           "userKey": currentUser.uid ?? "",
           "createdDate": new Date(),
           "NumOfLikes": [],
+          "isNotice": data.isNotice ?? false,
         })
   
-        // push(`/ta?val=account`);
-        location.reload();
+        // push(`/qu`);
+        setPag("account")
     }
 
 
@@ -86,44 +92,6 @@ const question = () => {
   }
 
 
-//   async function uploadUrl() {
-//   for (const file of uploadFile) {
-//     const timestamp = Date.now();
-//     const metadata = { contentType: file.type };
-//     const storagePath = `uploads/${userId}/${timestamp}-${file.name}`;
-//     const storageRef = strRef(storage, storagePath);
-
-//     const uploadTask = uploadBytesResumable(storageRef, file, metadata);
-
-//     await new Promise((resolve, reject) => {
-//       uploadTask.on(
-//         "state_changed",
-//         (snapshot) => {
-//           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-//           setPercentage(Math.round(progress));
-//         },
-//         (error) => {
-//           console.error("Upload error:", error);
-//           reject(error);
-//         },
-//         async () => {
-//           try {
-//             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-//             image.push({ url: downloadURL, path: storagePath });
-//             setImage(prev => [...prev, downloadURL]);
-//             resolve(); // continue loop
-//           } catch (e) {
-//             reject(e);
-//           }
-//         }
-//       );
-//     });
-//   }
-
-//   return image; // each item: { url, path }
-// }
-  
-
 
   
     function selectFiles(){
@@ -131,26 +99,42 @@ const question = () => {
     }
 
   
-    function onFileSelect(event){   //보여주고 handle로 넘어가게 한다.
-      const files = event.target.files
-      const uploadFile = Array.from(files)
-      setUploadFile((prevImages) => 
-        prevImages.concat(uploadFile)
-      )
-      if (files.length === 0) return;
-      for (let i = 0; i < files.length; i++) {
-        if (files[i].type.split('/')[0] !== 'image') continue;
-        if (!images.some((e)=> e.name === files[i].name)) {
-          setImages((prevImages) => [
-            ...prevImages, 
-           {
-            name: files[i].name,
-            url: URL.createObjectURL(files[i])
-           },
+  async function onFileSelect(event) {
+  const files = event.target.files;
+  if (files.length === 0) return;
+
+  const compressedFiles = [];
+
+  for (let i = 0; i < files.length; i++) {
+    if (files[i].type.split('/')[0] !== 'image') continue;
+    if (!images.some(e => e.name === files[i].name)) {
+      const options = {
+        maxSizeMB: 0.3,              // 최대 0.3MB로 압축
+        maxWidthOrHeight: 1024,   // 최대 폭 또는 높이 1024px
+        useWebWorker: true,
+      };
+
+      try {
+        const compressedFile = await imageCompression(files[i], options);
+        compressedFiles.push(compressedFile);
+
+        setImages(prevImages => [
+          ...prevImages,
+          {
+            name: compressedFile.name,
+            url: URL.createObjectURL(compressedFile),
+          },
         ]);
-      }
+      } catch (error) {
+        console.error('이미지 압축 실패:', error);
       }
     }
+  }
+
+  setUploadFile(prev => [...prev, ...compressedFiles]);
+}
+
+
   
     function deleteImage(index) {
       setImages((prevImages) => 
@@ -245,7 +229,7 @@ const question = () => {
                   {...register("title")}
                 />
              <div className='mt-5'/>
-            
+
               <textarea
                     className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                     placeholder="장문 입력"
@@ -254,7 +238,13 @@ const question = () => {
                     cols="16"
                     {...register("description")}
                 />     
-              <div className='mt-5'/>  
+              {/* <div className='mt-5'/>   */}
+
+              <label className="flex items-center ml-3 mt-3 space-x-2 text-sm">
+                <input type="checkbox" {...register("isNotice")} />
+                <span>공지사항</span>
+              </label>
+             <div className='mt-5'/>
 
             <div>
                 <button
@@ -269,4 +259,4 @@ const question = () => {
   )
 }
 
-export default question
+

@@ -6,15 +6,18 @@ import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, dele
 import app, { storage } from '../../firebase';
 import { useSelector } from 'react-redux';
 import { useRouter } from "next/navigation";
+import { ref as strRef, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
+import useUIState from "@/hooks/useUIState";
 
 
-const Comment = ({ id, col, path }) => {
+const Comment = ({ id, col, path, urls }) => {
   const { register, reset, handleSubmit, formState: { errors } } = useForm();
   const timeFromNow = timestamp => moment(timestamp).format('YYYY.MM.DD');
   const [message, setMessages] = useState([]);
   const { currentUser } = useSelector(state => state.user)
   const db2 = getFirestore(app);
   const { push } = useRouter();
+  const { homeCategory, setHomeCategory, setHeaderImageSrc } = useUIState();
 
 
 
@@ -24,6 +27,8 @@ const Comment = ({ id, col, path }) => {
       return () => {
       }
     }, [])
+
+
   
   
     const addMessagesListener = async () => {
@@ -52,6 +57,10 @@ const Comment = ({ id, col, path }) => {
         }
     };
 
+  
+     
+    
+
 
 
 
@@ -63,40 +72,55 @@ const Comment = ({ id, col, path }) => {
            "createdDate": new Date(),
          })
    
-         // push(`/ta?val=account`);
-        //  location.reload();
-    
+         location.reload();
+         setHomeCategory(item);
       }
 
 
-  async function deleteFile() {
-    const fileRef = strRef(storage, test);
+  const handleBulkDelete = async () => {
+  const extractStoragePath = (url) => {
     try {
-      await deleteObject(fileRef);
-      console.log(`Deleted: ${path}`);
-    } catch (error) {
-      console.error("Delete failed:", error);
+      const decoded = decodeURIComponent(url);
+      const match = decoded.match(/\/o\/(.+?)\?/);
+      return match ? match[1] : null;
+    } catch {
+      return null;
     }
-}    
+  };
+
+  const deletePromises = urls.map((url) => {
+    const path = extractStoragePath(url);
+    console.log(path)
+    if (!path) return null;
+    const fileRef = strRef(storage, path);
+    return deleteObject(fileRef)
+      .then(() => console.log(`Deleted: ${path}`))
+      .catch((err) => console.error(`Error deleting ${path}`, err));
+  });
+
+  // wait for all deletions to finish
+  await Promise.all(deletePromises);
+};    
+
     
     
   const deleteCol = async (ids) => {
       if (window.confirm("삭제 하시겠습니까??")) {
           const items = []
-          const subcols = query(collection(db2, col, id, "comments"))
+          const subcols = query(collection(db2, col, ids, "comments"))
           const querySnapshot = await getDocs(subcols)
           querySnapshot.forEach((doc) => {
                 items.push(doc)
               });
       for(var i = 0; i < items.length; i++) {
-        await deleteDoc(doc(db2, "reviews", props, "comments", items[i].id))
+        await deleteDoc(doc(db2, col, ids, "comments", items[i].id))
           }
           
-          await deleteDoc(doc(db2, "reviews", ids))
+          await deleteDoc(doc(db2, col, ids))
             alert("삭제되었습니다.");
-            push("/ta")
+            push(path)
 
-          await deleteFile()
+          await handleBulkDelete()
             
       } else {
             alert("취소합니다.");
@@ -115,7 +139,7 @@ const Comment = ({ id, col, path }) => {
                <div className='font-semibold text-[20px]'>답변</div>
                <div className='flex flex-row items-center gap-3'>
                 <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {push(path)}}>목록</button>
-                <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {deleteCol(props)}}>삭제</button>
+                <button className='mb-10 text-[12px] text-[#666] p-0.5 rounded-sm border border-gray-200' onClick={()=> {deleteCol(id)}}>삭제</button>
                </div>
             </div>   
  

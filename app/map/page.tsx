@@ -7,7 +7,7 @@ import { HiArrowTurnRightUp } from "react-icons/hi2";
 import { HiMiniMapPin } from "react-icons/hi2";
 import { HiPhone } from "react-icons/hi2";
 import Mapping from '@/components/template/Mapping';
-import ScrollableTabsButtonForce from '@/components/tab'
+
 
 
 function page() {

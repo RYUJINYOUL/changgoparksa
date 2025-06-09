@@ -4,7 +4,9 @@ import moment from 'moment';
 import { Card, Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from 'react-redux';
-import { getFirestore, collection, where, setDoc, onSnapshot, query} from "firebase/firestore";
+import { GiSpeaker } from "react-icons/gi";
+import { BsCardText } from "react-icons/bs";
+import { getFirestore, collection, where, orderBy, onSnapshot, query} from "firebase/firestore";
 import app from '../firebase.js';
 import Image from "next/image";
 
@@ -30,22 +32,30 @@ export default function DefaultTable({props}) {
 
   const addMessagesListener = async () => {
 
-    const tweetsQuery = query(collection(db2, "recommend"))
+      const tweetsQuery = query(
+          collection(db2, "recommend"),
+          orderBy("isNotice", "desc"),       // 공지사항이 먼저
+          orderBy("createdDate", "desc")     // 최신순 정렬
+       );
 
-      await onSnapshot(tweetsQuery, (snapshot) => { // <---- 
+      await onSnapshot(tweetsQuery, (snapshot) => {
         const tweetList = snapshot.docs.map((doc) => {
-          const { name, description, url, 
-            title, phoneNumber, createdDate, NumOfLikes, userKey
-          } = doc.data();
-          const id = doc.id
-          const date = doc.data().createdDate.toDate();
+          const data = doc.data();
           return {
-            name, description, url, id,
-            title, date, NumOfLikes, userKey, url
+            id: doc.id,
+            name: data.name,
+            description: data.description,
+            url: data.url,
+            title: data.title,
+            date: data.createdDate.toDate(),
+            NumOfLikes: data.NumOfLikes,
+            userKey: data.userKey,
+            isNotice: data.isNotice ?? false,
           };
         });
-          setMessages(tweetList);
-      });
+
+      setMessages(tweetList);
+    });
   };
 
 
@@ -83,7 +93,7 @@ export default function DefaultTable({props}) {
           </tr>
         </thead>
         <tbody>
-          {message.map(({ title, name, description, date, id, url }, index) => {
+          {message.map(({ title, name, isNotice, date, id, url }, index) => {
             const classes = "p-4";
  
             return (
@@ -94,13 +104,20 @@ export default function DefaultTable({props}) {
                     color="blue-gray"
                     className="font-normal truncate w-[40px]"
                   >
-                     <Image
+                    
+                {isNotice
+                     ? <GiSpeaker className='h-5.5 w-5.5'/>
+                     :  
+                     (url.length !== 0)
+                      ? <Image
                         alt="mediaItem"
                         className="object-contain"
-                        width={50}
+                        width={30}
                         height={50}
                         src={url[0]}
-                      />  
+                      /> 
+                      : <BsCardText className='h-5 w-5'/>
+                    }
                   </Typography>
                 </td>
                 <td className={classes}>

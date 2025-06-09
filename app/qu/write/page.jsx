@@ -10,7 +10,7 @@ const page = () => {
 
   return (
     <div className='w-full h-full'>
-      <DefaultTable2 props={[TABLE_HEAD, "/so"]} />
+      <DefaultTable2 props={[TABLE_HEAD]} />
     </div>
     
   )
